@@ -44,9 +44,17 @@ The training pipeline applies **differential augmentation** based on class:
 - **Positive samples** (metastasis): Mild augmentation to preserve lesion texture and boundaries
 - **Negative samples** (normal brain): Strong augmentation (CLAHE, sharpening) to create harder negatives
 
-**View augmentation examples**:
-- [Positive Sample Augmentation Examples](docs/images/augmentation_positive.png) - Shows original model input + 3 augmented versions with mild transforms
-- [Negative Sample Augmentation Examples](docs/images/augmentation_negative.png) - Shows original model input + 3 augmented versions with strong transforms
+**Positive Sample Augmentation (Mild)**
+
+![Positive Sample Augmentation Examples](docs/images/augmentation_positive.png)
+
+*Shows original model input (left) + 3 augmented versions with mild transforms (gentle gamma, blur, rotation 5°). Preserves lesion texture and boundaries.*
+
+**Negative Sample Augmentation (Strong)**
+
+![Negative Sample Augmentation Examples](docs/images/augmentation_negative.png)
+
+*Shows original model input (left) + 3 augmented versions with strong transforms (CLAHE, sharpening, rotation 10°). Creates harder negatives to improve model robustness.*
 
 ### Preprocessing Steps Explained
 
