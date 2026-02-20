@@ -1,6 +1,6 @@
 # Deep Learning for Clinical Neuro-Oncology
 
-A production-ready deep learning pipeline for automated detection of brain metastases from CT scans using ResNet-50 with RadImageNet pretraining.
+Deep learning pipeline for automated detection of brain metastases from CT scans using ResNet-50 with RadImageNet pretraining.
 
 ## Overview
 
@@ -8,7 +8,7 @@ This project implements a patient-level classification system that detects brain
 
 ### Key Innovation
 
-**Patient-Level Training**: Unlike traditional slice-level approaches, this system trains and evaluates at the patient level, preventing data leakage and ensuring clinically meaningful predictions.
+**Patient-Level Training**: this system trains and evaluates at the patient level, preventing data leakage and ensuring clinically meaningful predictions.
 
 ## Preprocessing Pipeline
 
@@ -16,17 +16,9 @@ The pipeline transforms raw DICOM CT scans into normalized tensors through six s
 
 ### Example: Negative Sample (Normal Brain)
 
-**Raw DICOM Slice**
+![Negative Comparison](docs/images/negative_comparison.png)
 
-![Negative Raw](docs/images/negative_raw.png)
-
-*Original CT scan in Hounsfield Units (-1000 to +3000 HU). Contains skull, air spaces, and brain parenchyma.*
-
-**After Preprocessing**
-
-![Negative Processed](docs/images/negative_processed.png)
-
-*After brain extraction, windowing (brain window 40/80 HU), and normalization. Shows clean brain parenchyma with bilateral symmetry and homogeneous tissue appearance.*
+*Side-by-side comparison showing the transformation from raw DICOM (Hounsfield Units) to the exact model input. Left: Original CT scan with skull, air spaces, and brain. Right: After brain extraction, windowing (40/80 HU), normalization, and resizing to 256x256 - this is what the model sees.*
 
 **Key Features**:
 - Bilateral symmetry maintained
@@ -36,23 +28,25 @@ The pipeline transforms raw DICOM CT scans into normalized tensors through six s
 
 ### Example: Positive Sample (Brain Metastasis)
 
-**Raw DICOM Slice**
+![Positive Comparison](docs/images/positive_comparison.png)
 
-![Positive Raw](docs/images/positive_raw.png)
-
-*Original CT scan showing brain parenchyma with a focal lesion.*
-
-**After Preprocessing**
-
-![Positive Processed](docs/images/positive_processed.png)
-
-*After preprocessing, the metastatic lesion appears as a focal hyperdense region with heterogeneous texture. The preprocessing enhances contrast while preserving diagnostic features.*
+*Side-by-side comparison showing preprocessing pipeline. Left: Raw DICOM with focal lesion. Right: Model input after full preprocessing - the metastatic lesion appears as a focal hyperdense region with preserved diagnostic features.*
 
 **Key Features**:
 - Focal hyperdense lesion (bright spot)
 - Heterogeneous texture within lesion
 - May show irregular margins
 - Surrounding edema visible
+
+### Class-Conditional Augmentation Examples
+
+The training pipeline applies **differential augmentation** based on class:
+- **Positive samples** (metastasis): Mild augmentation to preserve lesion texture and boundaries
+- **Negative samples** (normal brain): Strong augmentation (CLAHE, sharpening) to create harder negatives
+
+**View augmentation examples**:
+- [Positive Sample Augmentation Examples](docs/images/augmentation_positive.png) - Shows original model input + 3 augmented versions with mild transforms
+- [Negative Sample Augmentation Examples](docs/images/augmentation_negative.png) - Shows original model input + 3 augmented versions with strong transforms
 
 ### Preprocessing Steps Explained
 
@@ -358,7 +352,7 @@ Epoch 49 Results (threshold=0.10):
 - **Most Balanced**: F1=0.8276, Sens=87.8%, Spec=83.6% (Final epoch 50)
 
 ### Training Characteristics
-- **Training time**: 3-5 hours on T4 GPU (50 epochs)
+
 - **Evaluation**: Patient-level metrics (102 patients)
 - **Data split**: 80/20 train/validation at patient level
 - **Checkpoints**: 10+ files saved during training
@@ -472,8 +466,10 @@ All tests PASSED! Installation is correct.
 The README includes preprocessing examples and training graphs generated from actual patient data:
 
 ### Preprocessing Examples (`docs/images/`)
-- `positive_raw.png` / `positive_processed.png` - Metastasis case
-- `negative_raw.png` / `negative_processed.png` - Normal brain case
+- `negative_comparison.png` - Side-by-side: Raw DICOM → Model Input (Normal Brain)
+- `positive_comparison.png` - Side-by-side: Raw DICOM → Model Input (Metastasis)
+- `augmentation_negative.png` - Differential augmentation examples for negative class (4-panel)
+- `augmentation_positive.png` - Differential augmentation examples for positive class (4-panel)
 
 ### Training Graphs (`docs/images/`)
 - `training_curves.png` - Complete 4-panel training visualization
@@ -483,9 +479,7 @@ The README includes preprocessing examples and training graphs generated from ac
 
 See `EVALUATION_RESULTS.md` for detailed analysis of all graphs.
 
-## Troubleshooting
 
-### CUDA out of memory
 Reduce batch size:
 ```bash
 python scripts/train.py ... --batch_size 16
@@ -542,21 +536,7 @@ Fine-tuning all layers from the start can cause:
 
 **Solution**: Progressive unfreezing allows the classifier to stabilize before adapting deeper layers.
 
-## Citation
 
-If you use this code in your research, please cite:
-
-```
-[Add your citation]
-```
-
-## License
-
-[Specify license - e.g., MIT, Apache 2.0]
-
-## Contact
-
-[Add your contact information]
 
 ## Related Projects
 
@@ -564,7 +544,7 @@ If you use this code in your research, please cite:
 
 A companion project for automated localization of the L3 vertebra in CT scans, used for body composition analysis and sarcopenia assessment. Located in `../Localization_L3_Vertebra/`.
 
-**Problem**: Identify the exact slice position of the L3 vertebra in abdominal/chest CT scans (typically 200-300 sequential slices) for standardized cross-sectional area measurements.
+**Problem**: Identify the exact slice position of the L3 vertebra in abdominal/chest CT scans for standardized cross-sectional area measurements.
 
 **Two Approaches Proposed**:
 
