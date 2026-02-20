@@ -399,34 +399,6 @@ python scripts/preprocess_data.py \
 
 Speeds up subsequent training runs significantly.
 
-## Testing
-
-Verify installation and environment:
-
-```bash
-python scripts/test_installation.py
-```
-
-Reduce batch size:
-```bash
-python scripts/train.py ... --batch_size 16
-```
-
-### Training is slow
-Disable expensive augmentations in `config/config.py`.
-
-### Model predicts all negatives
-Check class balance in logs and consider increasing `pos_weight`:
-```python
-cfg.training.pos_weight = 2.0
-```
-
-### No GPU detected
-Verify CUDA installation:
-```bash
-python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}')"
-```
-
 ## Scientific Background
 
 ### Why Patient-Level Training?
