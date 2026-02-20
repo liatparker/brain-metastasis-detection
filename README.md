@@ -486,13 +486,9 @@ The README includes preprocessing examples and training graphs generated from ac
 - `augmentation_negative.png` - Differential augmentation examples for negative class (4-panel with heatmaps)
 - `augmentation_positive.png` - Differential augmentation examples for positive class (4-panel with heatmaps)
 
-### Training Graphs (`docs/images/`)
-- `training_curves.png` - Complete 4-panel training visualization
-- `f1_score_curve.png` - F1 progression over 50 epochs
-- `loss_curves.png` - Training and validation loss
-- `sensitivity_specificity.png` - Sens/Spec trends
+### Training Graphs
 
-See `EVALUATION_RESULTS.md` for detailed analysis of all graphs.
+See `EVALUATION_RESULTS.md` for detailed training metrics and graphs.
 
 
 Reduce batch size:
