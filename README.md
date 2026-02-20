@@ -207,15 +207,6 @@ Organize your data:
 └── labels1.csv
 ```
 
-CSV format:
-```csv
-ID,Label,PatientID
-slice_001,0,patient_001
-slice_002,0,patient_001
-slice_003,1,patient_002
-...
-```
-
 ### 2. Train Model
 
 ```bash
@@ -286,19 +277,7 @@ Deep_Learning_for_Clinical_Neuro_Oncology/
 
 ## Configuration
 
-All hyperparameters are centralized in `config/config.py`:
-
-```python
-from config import Config
-
-cfg = Config()
-
-# Modify as needed
-cfg.training.num_epochs = 50
-cfg.training.batch_size = 32
-cfg.training.classifier_lr = 5e-5
-cfg.augmentation.aug_prob_positive = 0.7
-```
+All hyperparameters are centralized in `config/config.py`.
 
 ### Key Configuration Options
 
@@ -404,18 +383,7 @@ python scripts/train.py \
 
 ### Custom Configuration
 
-Modify `config/config.py` for experiment tracking:
-
-```python
-# Experiment 1: More conservative training
-cfg.training.classifier_lr = 1e-5
-cfg.training.layer4_lr = 5e-6
-cfg.training.confidence_weight = 0.0  # Disable confidence penalty
-
-# Experiment 2: Lighter augmentation
-cfg.augmentation.aug_prob_positive = 0.5
-cfg.augmentation.use_clahe = False
-```
+Modify `config/config.py` for experiment tracking.
 
 ### Preprocessing Only
 
@@ -436,26 +404,6 @@ Verify installation and environment:
 
 ```bash
 python scripts/test_installation.py
-```
-
-Output:
-```
-======================================================================
-INSTALLATION TEST
-======================================================================
-Testing imports...
-  PyTorch: 2.0.0
-  CUDA available: True
-  CUDA version: 11.8
-  ...
-Testing model creation...
-  Model created successfully
-  Total parameters: 24,583,169
-  Forward pass successful
-  ...
-======================================================================
-All tests PASSED! Installation is correct.
-======================================================================
 ```
 
 ## Visual Assets
@@ -480,11 +428,7 @@ python scripts/train.py ... --batch_size 16
 ```
 
 ### Training is slow
-Disable expensive augmentations in `config/config.py`:
-```python
-cfg.augmentation.use_clahe = False
-cfg.augmentation.use_sharpening = False
-```
+Disable expensive augmentations in `config/config.py`.
 
 ### Model predicts all negatives
 Check class balance in logs and consider increasing `pos_weight`:
