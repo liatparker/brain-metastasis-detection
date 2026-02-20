@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data and models (too large for git)
+data/
+datasets/
+*.dcm
+*.nii
+*.nii.gz
+models/*.pth
+outputs/
+*.pkl
+*.pickle
+
+# Logs and temporary files
+*.log
+logs/
+runs/
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large files
+radimagenet_weights/
+*.pt
+*.pth.tar
