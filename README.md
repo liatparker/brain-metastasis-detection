@@ -334,23 +334,6 @@ Each checkpoint contains model weights, optimizer state, metrics, optimal thresh
 
 See `EVALUATION_RESULTS.md` for complete checkpoint comparison and `CHECKPOINT_STRUCTURE.md` for detailed documentation.
 
-## Training Output Example
-
-```
-======================================================================
-EPOCH 49/50
-======================================================================
-Training: 100%|████████████████████| 45/45 [02:15<00:00]
-Validation: 100%|████████████████████| 12/12 [00:30<00:00]
-
-Epoch 49 Results (threshold=0.10):
-   Train Loss: 0.1823  |  Val Loss: 0.2456
-   Val F1: 0.8511  Sens: 0.9756  Spec: 0.7869
-   Mean pred POS: 0.687  NEG: 0.234  Sep: 0.453
-   New best! Saved: best_model_f1_0.8511.pth
-======================================================================
-```
-
 ## Performance
 
 ### Training Results (50 epochs)
