@@ -48,13 +48,13 @@ The training pipeline applies **differential augmentation** based on class:
 
 ![Positive Sample Augmentation Examples](docs/images/augmentation_positive.png)
 
-*Top row: Original model input + 3 augmented versions with mild transforms (γ=brightness, blur, rotation 7°). Bottom row: Difference heatmaps (red = changed pixels) showing minimal modification to preserve lesion features.*
+*Top row: Original model input + 3 augmented versions with mild transforms (γ=brightness adjustment, gentle blur). Bottom row: Difference heatmaps (red = changed pixels) showing minimal modification to preserve lesion features.*
 
 **Negative Sample Augmentation (Strong)**
 
 ![Negative Sample Augmentation Examples](docs/images/augmentation_negative.png)
 
-*Top row: Original model input + 3 augmented versions with strong transforms (γ=brightness, CLAHE local contrast, double sharpening, rotation 12°). Bottom row: Difference heatmaps showing extensive modifications to create harder negative samples.*
+*Top row: Original model input + 3 augmented versions with strong transforms (γ=brightness adjustment, CLAHE local contrast enhancement, 2× sharpening). Bottom row: Difference heatmaps showing extensive modifications to create harder negative samples.*
 
 ### Preprocessing Steps Explained
 
