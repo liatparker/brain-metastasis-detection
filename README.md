@@ -26,17 +26,23 @@ The pipeline transforms raw DICOM CT scans into normalized tensors through six s
 - No focal lesions
 - Smooth tissue texture
 
-### Example: Positive Sample (Brain Metastasis)
+### Example: Positive Sample #1 (Brain Metastasis - High Asymmetry)
 
 ![Positive Comparison](docs/images/positive_comparison.png)
 
-*Side-by-side comparison showing preprocessing pipeline. Left: Raw DICOM with focal lesion. Right: Model input after full preprocessing - the metastatic lesion appears as a focal hyperdense region with preserved diagnostic features.*
+*Side-by-side comparison showing preprocessing pipeline. Left: Raw DICOM with focal lesion. Right: Model input after full preprocessing - the metastatic lesion appears as a focal hyperdense region with preserved diagnostic features. This sample shows clear left-right asymmetry.*
 
 **Key Features**:
 - Focal hyperdense lesion (bright spot)
+- Clear asymmetry (unilateral presentation)
 - Heterogeneous texture within lesion
 - May show irregular margins
-- Surrounding edema visible
+
+### Example: Positive Sample #2 (Brain Metastasis - Alternative Presentation)
+
+![Positive Comparison 2](docs/images/positive_comparison_2.png)
+
+*Another metastasis case showing different lesion characteristics and location. Demonstrates the variability in metastatic presentations that the model must handle.*
 
 ### Class-Conditional Augmentation Examples
 
@@ -475,9 +481,10 @@ The README includes preprocessing examples and training graphs generated from ac
 
 ### Preprocessing Examples (`docs/images/`)
 - `negative_comparison.png` - Side-by-side: Raw DICOM → Model Input (Normal Brain)
-- `positive_comparison.png` - Side-by-side: Raw DICOM → Model Input (Metastasis)
-- `augmentation_negative.png` - Differential augmentation examples for negative class (4-panel)
-- `augmentation_positive.png` - Differential augmentation examples for positive class (4-panel)
+- `positive_comparison.png` - Side-by-side: Raw DICOM → Model Input (Metastasis #1 - High Asymmetry)
+- `positive_comparison_2.png` - Side-by-side: Raw DICOM → Model Input (Metastasis #2 - Alternative Presentation)
+- `augmentation_negative.png` - Differential augmentation examples for negative class (4-panel with heatmaps)
+- `augmentation_positive.png` - Differential augmentation examples for positive class (4-panel with heatmaps)
 
 ### Training Graphs (`docs/images/`)
 - `training_curves.png` - Complete 4-panel training visualization
