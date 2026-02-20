@@ -1,10 +1,10 @@
 # Deep Learning for Clinical Neuro-Oncology
 
-Deep learning pipeline for automated detection of brain metastases from CT scans using ResNet-50 with RadImageNet pretraining.
+Deep learning pipeline for automated detection of brain metastases from CT scans using `ResNet-50` with `RadImageNet` pretraining.
 
 ## Overview
 
-This project implements a patient-level classification system that detects brain metastases from head CT scans. The system uses a ResNet-50 backbone pretrained on RadImageNet (1.35M medical images) and employs advanced training techniques including curriculum learning, class-conditional augmentation, and patient-level pooling.
+This project implements a patient-level classification system that detects brain metastases from head CT scans. The system uses a `ResNet-50` backbone pretrained on `RadImageNet` (1.35M medical images) and employs advanced training techniques including curriculum learning, class-conditional augmentation, and patient-level pooling.
 
 ### Key Innovation
 
@@ -90,7 +90,7 @@ Output: Logit (sigmoid → probability)
 ```
 
 **Total Parameters**: 24.6M  
-**Pretrained on**: RadImageNet (medical images)  
+**Pretrained on**: `RadImageNet` (medical images)  
 **Input**: Single-channel CT (grayscale)  
 **Output**: Binary classification (metastasis present/absent)
 
@@ -120,7 +120,7 @@ Training progresses through three stages with automatic layer unfreezing:
 - Frozen: All ResNet layers (conv1 through layer4)
 - Trainable: Classifier head only (1.05M parameters)
 - Learning rate: 5e-5
-- Goal: Learn to use frozen RadImageNet features
+- Goal: Learn to use frozen `RadImageNet` features
 
 **Stage 2 (Epochs 5-11): Layer4 Fine-tuning**
 - Frozen: conv1 through layer3
@@ -167,7 +167,7 @@ pip install -e .
 
 ### RadImageNet Pretrained Weights
 
-The model uses **RadImageNet-ResNet50** pretrained weights from HuggingFace (`microsoft/RadImageNet-ResNet50`).
+The model uses **`RadImageNet-ResNet50`** pretrained weights from HuggingFace (`microsoft/RadImageNet-ResNet50`).
 
 **Automatic Download** (recommended):
 - Weights will automatically download on first training/inference run (~100 MB)
@@ -187,7 +187,7 @@ weights_path = hf_hub_download(
 - Python 3.8+
 - PyTorch 2.0+
 - CUDA-capable GPU (recommended)
-- Internet connection (for first-time RadImageNet download)
+- Internet connection (for first-time `RadImageNet` download)
 - See `requirements.txt` for complete list
 
 ## Quick Start
@@ -254,7 +254,7 @@ Deep_Learning_for_Clinical_Neuro_Oncology/
 ├── config/               # Configuration
 │   └── config.py         # All hyperparameters
 ├── src/
-│   ├── models/          # ResNet50_ImageOnly
+│   ├── models/          # `ResNet50_ImageOnly`
 │   ├── preprocessing/   # Brain extraction, windowing
 │   ├── data/            # Dataset, PatientSampler
 │   └── utils/           # Metrics and visualization
@@ -407,22 +407,6 @@ Verify installation and environment:
 python scripts/test_installation.py
 ```
 
-## Visual Assets
-
-The README includes preprocessing examples and training graphs generated from actual patient data:
-
-### Preprocessing Examples (`docs/images/`)
-- `negative_comparison.png` - Side-by-side: Raw DICOM → Model Input (Normal Brain)
-- `positive_comparison.png` - Side-by-side: Raw DICOM → Model Input (Metastasis #1 - High Asymmetry)
-- `positive_comparison_2.png` - Side-by-side: Raw DICOM → Model Input (Metastasis #2 - Alternative Presentation)
-- `augmentation_negative.png` - Differential augmentation examples for negative class (4-panel with heatmaps)
-- `augmentation_positive.png` - Differential augmentation examples for positive class (4-panel with heatmaps)
-
-### Training Graphs
-
-See `EVALUATION_RESULTS.md` for detailed training metrics and graphs.
-
-
 Reduce batch size:
 ```bash
 python scripts/train.py ... --batch_size 16
@@ -495,8 +479,8 @@ Both approaches implement patient-level data handling to prevent data leakage fr
 
 ## Acknowledgments
 
-- RadImageNet pretrained weights from HuggingFace (microsoft/RadImageNet-ResNet50)
-- ResNet-50 architecture from torchvision
+- `RadImageNet` pretrained weights from HuggingFace (`microsoft/RadImageNet-ResNet50`)
+- `ResNet-50` architecture from torchvision
 - Preprocessing techniques adapted from clinical radiology best practices
 
 ## Additional Resources
