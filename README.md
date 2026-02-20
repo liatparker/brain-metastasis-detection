@@ -329,6 +329,7 @@ See `EVALUATION_RESULTS.md` for complete checkpoint comparison and `CHECKPOINT_S
 
 ### Training Characteristics
 
+- **Hardware**: Trained on GPU
 - **Evaluation**: Patient-level metrics (102 patients)
 - **Data split**: 80/20 train/validation at patient level
 - **Checkpoints**: 10+ files saved during training
