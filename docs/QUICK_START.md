@@ -63,7 +63,7 @@ Resume from a checkpoint:
 python scripts/train.py \
     --data_root /path/to/brain_metastases/CTs \
     --labels_path /path/to/brain_metastases/labels1.csv \
-    --resume ./outputs/models/checkpoint_epoch12_stage2_f1_0.6500.pth
+    --resume ./outputs/models/YOUR_CHECKPOINT.pth
 ```
 
 ## Key Configuration
@@ -115,12 +115,12 @@ Training automatically saves 4-6 checkpoint files at key milestones:
 4. **Final Epoch** (epoch 40 - full training complete):
    - `checkpoint_epoch40_stage3_f1_<score>.pth`
 
-**Example filenames**:
+**Example filenames** (your F1 scores will vary):
 ```
-best_model_f1_0.7234.pth
-checkpoint_epoch05_stage1_f1_0.6123.pth
-checkpoint_epoch12_stage2_f1_0.6890.pth
-checkpoint_epoch40_stage3_f1_0.7150.pth
+best_model_patient_pooling.pth
+checkpoint_epoch05_stage1_f1_XXXX.pth
+checkpoint_epoch12_stage2_f1_XXXX.pth
+checkpoint_epoch40_stage3_f1_XXXX.pth
 ```
 
 ## Inference
@@ -129,7 +129,7 @@ checkpoint_epoch40_stage3_f1_0.7150.pth
 
 ```bash
 python scripts/inference.py \
-    --checkpoint ./outputs/models/best_model_f1_0.7500.pth \
+    --checkpoint ./outputs/models/YOUR_CHECKPOINT.pth \
     --input /path/to/patient/dicoms/
 ```
 
@@ -151,7 +151,7 @@ Max slice probability: 0.785
 Process multiple patients:
 ```bash
 python scripts/inference.py \
-    --checkpoint ./outputs/models/best_model_f1_0.7500.pth \
+    --checkpoint ./outputs/models/YOUR_CHECKPOINT.pth \
     --input /path/to/all/patients/ \
     --output predictions.csv \
     --batch_process

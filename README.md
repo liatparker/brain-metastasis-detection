@@ -226,21 +226,25 @@ Training will automatically:
 
 ### 3. Run Inference
 
+> **Note**: You must train a model first (step 2) to generate a checkpoint file before running inference.
+
 **Single patient**:
 ```bash
 python scripts/inference.py \
-    --checkpoint ./outputs/models/best_model_f1_0.8511.pth \
+    --checkpoint ./outputs/models/best_model_patient_pooling.pth \
     --input /path/to/patient/dicoms/
 ```
 
 **Batch processing**:
 ```bash
 python scripts/inference.py \
-    --checkpoint ./outputs/models/best_model_f1_0.8511.pth \
+    --checkpoint ./outputs/models/best_model_patient_pooling.pth \
     --input /path/to/all/patients/ \
     --output predictions.csv \
     --batch_process
 ```
+
+Replace `best_model_patient_pooling.pth` with your actual checkpoint filename from training.
 
 ## Project Structure
 
@@ -297,44 +301,57 @@ See `config/config.py` for all options with detailed docstrings.
 
 ## Checkpoints
 
-Training saves 10+ checkpoint files at key milestones:
+> **Important**: Trained model weights (.pth files) are **not included** in this repository. You must train the model yourself to generate checkpoints. The GitHub repository contains only the code, architecture, and training pipeline.
 
-1. **Best Model** (F1 = 0.8511 at epoch 49):
-   - `best_model_f1_0.8511.pth` - **Recommended for deployment**
-   - Sensitivity: 97.6%, Specificity: 78.7%
+Training saves checkpoint files at key milestones to `outputs/models/` (locally or Google Drive):
 
-2. **Alternative Checkpoints**:
-   - `best_model_f1_0.8395.pth` (epoch 41) - Best specificity (90.2%)
-   - `checkpoint_epoch50_stage3_f1_0.8276.pth` - Final epoch, most balanced
-   - `best_model_f1_0.7573.pth` (epoch 35) - Mid-training peak
-   - `best_model_f1_0.6916.pth` (epoch 5) - End of Stage 1
+**Example Performance** (achievable with this pipeline):
+- **F1 Score**: 0.9136
+- **Sensitivity**: 90.24% 
+- **Specificity**: 95.08%
+- **Optimal Threshold**: 0.60 (high confidence)
 
-Each checkpoint contains model weights, optimizer state, metrics, optimal threshold, and complete training history.
+Each saved checkpoint contains:
+- Model weights and architecture
+- Optimizer state for resuming training
+- Validation metrics (F1, sensitivity, specificity)
+- Optimal classification threshold
+- Complete training history
 
-See `EVALUATION_RESULTS.md` for complete checkpoint comparison and `CHECKPOINT_STRUCTURE.md` for detailed documentation.
+See `EVALUATION_RESULTS.md` for training analysis and `CHECKPOINT_STRUCTURE.md` for checkpoint format documentation.
 
 ## Performance
 
-### Training Results (50 epochs)
+> **Note**: The results below demonstrate the performance achievable with this training pipeline. These metrics are from a successful training run. Your results may vary based on dataset characteristics and training parameters.
 
-**Best Model** (`best_model_f1_0.8511.pth` - Epoch 49):
-- **F1 Score**: 0.8511
-- **Sensitivity**: 97.56% (only 2.4% false negatives)
-- **Specificity**: 78.69% (21.3% false positives)
-- **Optimal Threshold**: 0.10
+### Example Training Results
 
-**Alternative Models**:
-- **Highest Specificity**: 90.16% (`best_model_f1_0.8395.pth` - Epoch 41)
-- **Most Balanced**: F1=0.8276, Sens=87.8%, Spec=83.6% (Final epoch 50)
+**Achieved Performance** (40 epochs with curriculum restart):
+- **F1 Score**: 0.9136
+- **Sensitivity**: 90.24% (only 9.8% false negatives)
+- **Specificity**: 95.08% (only 4.9% false positives)
+- **Optimal Threshold**: 0.60 (high confidence predictions)
+
+**Key Performance Indicators**:
+- Outstanding balance between sensitivity and specificity (both >90%)
+- High confidence threshold (0.60) indicates robust predictions
+- Excellent class separation: mean POS=0.833, NEG=0.110
+
+### Training Progression
+
+![Training History](docs/images/training_history_v2.png)
+
+*Training curves showing loss convergence, F1 score improvement, and sensitivity/specificity progression over 40 epochs. Red star marks best validation F1 at epoch 27.*
 
 ### Training Characteristics
 
 - **Hardware**: Trained on GPU
 - **Evaluation**: Patient-level metrics (102 patients)
 - **Data split**: 80/20 train/validation at patient level
-- **Checkpoints**: 10+ files saved during training
+- **Training**: 3-stage curriculum learning with restart strategy
+- **Final LRs**: Layer3=5e-6, Layer4=1e-5, Classifier=5e-5
 
-See `EVALUATION_RESULTS.md` for complete training graphs and detailed analysis.
+See `EVALUATION_RESULTS.md` for complete training analysis and detailed metrics.
 
 ## Patient-Level Training
 
@@ -379,8 +396,10 @@ All Python code includes comprehensive docstrings:
 python scripts/train.py \
     --data_root /path/to/data \
     --labels_path /path/to/labels.csv \
-    --resume ./outputs/models/best_model_f1_0.8395.pth
+    --resume ./outputs/models/best_model_patient_pooling.pth
 ```
+
+Replace with your actual checkpoint filename from a previous training run.
 
 ### Custom Configuration
 

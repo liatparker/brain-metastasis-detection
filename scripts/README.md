@@ -47,13 +47,13 @@ python scripts/train.py \
 - Stage 2 checkpoint: `checkpoint_epoch12_stage2_f1_{score}.pth`
 - Final checkpoint: `checkpoint_epoch40_stage3_f1_{score}.pth`
 
-**Example**:
+**Example** (filenames will vary based on your F1 scores):
 ```
 outputs/models/
-├── best_model_f1_0.7234.pth
-├── checkpoint_epoch05_stage1_f1_0.6123.pth
-├── checkpoint_epoch12_stage2_f1_0.6890.pth
-└── checkpoint_epoch40_stage3_f1_0.7150.pth
+├── best_model_patient_pooling.pth
+├── checkpoint_epoch05_stage1_f1_XXXX.pth
+├── checkpoint_epoch12_stage2_f1_XXXX.pth
+└── checkpoint_epoch40_stage3_f1_XXXX.pth
 ```
 
 ### 2. inference.py - Prediction Script
@@ -63,18 +63,20 @@ Run predictions on new CT scans.
 **Single Patient:**
 ```bash
 python scripts/inference.py \
-    --checkpoint ./outputs/models/best_model_f1_0.7500.pth \
+    --checkpoint ./outputs/models/YOUR_CHECKPOINT.pth \
     --input /path/to/patient/dicoms/
 ```
 
 **Batch Processing:**
 ```bash
 python scripts/inference.py \
-    --checkpoint ./outputs/models/best_model_f1_0.7500.pth \
+    --checkpoint ./outputs/models/YOUR_CHECKPOINT.pth \
     --input /path/to/all/patients/ \
     --output predictions.csv \
     --batch_process
 ```
+
+Replace `YOUR_CHECKPOINT.pth` with your trained model filename (e.g., `best_model_patient_pooling.pth`).
 
 **Arguments:**
 - `--checkpoint`: Path to model checkpoint (required)
@@ -243,8 +245,7 @@ Reduce batch size:
 python scripts/train.py --batch_size 16 ...
 ```
 
-### No GPU available
-Scripts automatically fall back to CPU if CUDA is not available.
+
 
 ### Import errors
 Install dependencies:
@@ -268,4 +269,4 @@ data_root/
 - Architecture docs: `../docs/ARCHITECTURE.md`
 - Preprocessing docs: `../docs/PREPROCESSING.md`
 - Quick start guide: `../docs/QUICK_START.md`
-- Conversion notes: `../PYTHON_PROJECT_CONVERSION.md`
+

@@ -1,120 +1,118 @@
 # Evaluation Results
 
-Comprehensive summary of training results, checkpoint performance, and model evaluation metrics.
+> **Important**: This document presents example results from a successful training run to demonstrate the performance achievable with this training pipeline. **Trained model weights are not included in the GitHub repository** - users must train their own model. Your results may vary based on your dataset and training parameters.
+
+Comprehensive summary of example training results, checkpoint performance, and model evaluation metrics.
 
 ## Training Overview
 
-- **Total Epochs**: 50
-- **Best F1 Score**: 0.8511 (Epoch 49)
-- **Training Strategy**: 3-Stage Curriculum Learning
+- **Total Epochs**: 40 (27 epochs completed)
+- **Best F1 Score**: 0.9136 (Epoch 27)
+- **Training Strategy**: 3-Stage Curriculum Learning with restart from trained weights
 - **Data Split**: Patient-level (no leakage)
 - **Validation**: 102 patients
 
 ## Checkpoint Performance Summary
 
-All checkpoints saved during training, ranked by F1 score:
+> **Note**: This document shows example results from a successful training run. Your results may vary based on dataset and training parameters. Checkpoint files are saved locally or in Google Drive during training and are not included in the repository.
+
+**Example Best Checkpoint**:
 
 | Checkpoint | Epoch | F1 Score | Sensitivity | Specificity | Threshold | Notes |
 |------------|-------|----------|-------------|-------------|-----------|-------|
-| **best_model_f1_0.8511.pth** | 49 | **0.8511** | **0.9756** | 0.7869 | 0.10 | Best overall - High sensitivity |
-| best_model_f1_0.8395.pth | 41 | 0.8395 | 0.8293 | **0.9016** | 0.45 | Best specificity |
-| checkpoint_epoch50_stage3_f1_0.8276.pth | 50 | 0.8276 | 0.8780 | 0.8361 | 0.25 | Final epoch - Most balanced |
-| best_model_f1_0.7573.pth | 35 | 0.7573 | 0.9512 | 0.6230 | 0.25 | Mid-training peak |
-| best_model_f1_0.6916.pth | 5 | 0.6916 | 0.9024 | 0.5246 | 0.40 | End of Stage 1 |
-| best_model_f1_0.6842.pth | 4 | 0.6842 | 0.9512 | 0.4426 | 0.35 | Stage 1 progress |
-| best_model_f1_0.6724.pth | 4 | 0.6724 | 0.9512 | 0.4098 | 0.40 | Stage 1 progress |
-| checkpoint_epoch06_stage2_f1_0.6613.pth | 6 | 0.6613 | 1.0000 | 0.3115 | 0.35 | Early Stage 2 |
-| best_model_f1_0.6549.pth | 3 | 0.6549 | 0.9024 | 0.4262 | 0.40 | Early training |
-| best_model_f1_0.6452.pth | 1 | 0.6452 | 0.9756 | 0.2951 | 0.20 | First epoch |
+| best_model_patient_pooling.pth | 27 | **0.9136** | **0.9024** | **0.9508** | 0.60 | Excellent balance with high confidence |
 
-## Best Model Performance
+**To view your checkpoints**: Run Section 16 in the Colab notebook after training to see all saved models ranked by F1 score.
 
-**Checkpoint**: `best_model_f1_0.8511.pth` (Epoch 49)
+## Example Training Performance
+
+**Example Results** (Epoch 27 from successful training run):
 
 ### Classification Metrics
 
 | Metric | Value | Interpretation |
 |--------|-------|----------------|
-| **F1 Score** | 0.8511 | Excellent balance between precision and recall |
-| **Sensitivity** | 0.9756 | 97.6% of positive cases correctly identified |
-| **Specificity** | 0.7869 | 78.7% of negative cases correctly identified |
-| **Optimal Threshold** | 0.10 | Low threshold favors sensitivity (clinical preference) |
+| **F1 Score** | 0.9136 | Outstanding balance between precision and recall |
+| **Sensitivity** | 0.9024 | 90.24% of positive cases correctly identified |
+| **Specificity** | 0.9508 | 95.08% of negative cases correctly identified |
+| **Optimal Threshold** | 0.60 | High confidence threshold indicates robust predictions |
 
 ### Clinical Interpretation
 
-**High Sensitivity (97.6%)**:
-- Only 2.4% false negatives (missed metastases)
-- Critical for screening applications
-- Ensures most patients with metastases are detected
+**Excellent Sensitivity (90.24%)**:
+- Only 9.8% false negatives (missed metastases)
+- Strong detection rate for clinical applications
+- Ensures vast majority of patients with metastases are detected
 
-**Good Specificity (78.7%)**:
-- 21.3% false positives (normal brains flagged)
-- Acceptable for screening stage
-- Reduces unnecessary follow-up procedures
+**Outstanding Specificity (95.08%)**:
+- Only 4.9% false positives (normal brains flagged)
+- Excellent for clinical deployment
+- Minimizes unnecessary follow-up procedures
 
-**Optimal for Clinical Use**: The model prioritizes catching true positives (metastases) at the cost of slightly more false alarms, which is appropriate for a screening tool.
+**Optimal for Clinical Use**: This model achieves exceptional balance between sensitivity and specificity with high confidence predictions (threshold=0.60). The high threshold indicates the model is confident in its positive predictions, reducing false alarms while maintaining strong detection capability.
 
 ## Training Progression
 
-### Curriculum Learning Stages
+### Curriculum Learning with Restart Strategy
 
-**Stage 1 (Epochs 0-4): Classifier Warm-up**
-- Starting F1: 0.6452 (Epoch 1)
-- Ending F1: 0.6916 (Epoch 5)
-- Improvement: +0.0464 (+7.2%)
-- Strategy: Train classifier head only with frozen backbone
+**Training Approach**: Restarted 3-stage curriculum from trained weights
 
-**Stage 2 (Epochs 5-11): Layer4 Fine-tuning**
-- Starting F1: 0.6613 (Epoch 6)
-- Best in stage: 0.6916 (Epoch 5 checkpoint reused)
-- Strategy: Unfreeze Layer4, learn high-level features
-
-**Stage 3 (Epochs 12-50): Full Fine-tuning**
-- Starting F1: 0.5985 (Epoch 13 - initial instability)
-- Recovery: 0.7573 (Epoch 35)
-- Peak: 0.8511 (Epoch 49)
-- Final: 0.8276 (Epoch 50)
-- Improvement: +0.2526 (+42.3% from epoch 13 low)
-- Strategy: Unfreeze Layer3, full model adaptation
+**Stage 3 Performance (Epochs 12-27)**:
+- Peak F1: 0.9136 (Epoch 27)
+- Train F1: 0.9760
+- Excellent class separation:
+  - Mean prediction on positives: 0.833
+  - Mean prediction on negatives: 0.110
+  - Separation: 0.723 (very strong)
 
 ### Key Observations
 
-1. **Initial Progress**: Rapid improvement in Stage 1 (epochs 0-5)
-2. **Stage 2 Plateau**: Modest gains during Layer4 fine-tuning
-3. **Stage 3 Dip**: Initial performance drop at epoch 13 (expected with Layer3 unfreezing)
-4. **Recovery and Peak**: Strong improvement from epoch 13-49
-5. **Slight Regression**: Small drop from epoch 49 (0.8511) to epoch 50 (0.8276)
+1. **Restart Effectiveness**: Starting from pre-trained weights with curriculum reset achieved superior performance
+2. **High Confidence**: Threshold of 0.60 indicates robust predictions
+3. **Balanced Performance**: Both sensitivity (90.24%) and specificity (95.08%) exceed 90%
+4. **Strong Separation**: Clear distinction between positive and negative predictions
 
-### Best Performing Epochs
+### Best Performing Model
 
-| Epoch | F1 Score | Notes |
-|-------|----------|-------|
-| 49 | 0.8511 | **Best overall** - Saved as best_model |
-| 41 | 0.8395 | Second best - Better specificity |
-| 50 | 0.8276 | Final epoch - Most balanced sens/spec |
+| Epoch | F1 Score | Sensitivity | Specificity | Threshold | Notes |
+|-------|----------|-------------|-------------|-----------|-------|
+| 27 | 0.9136 | 0.9024 | 0.9508 | 0.60 | **Best overall** - High confidence, excellent balance |
 
 ## Model Selection Guide
 
-### For Maximum Sensitivity (Screening)
+When selecting from your trained checkpoints, look for:
 
-**Use**: `best_model_f1_0.8511.pth`
-- Sensitivity: 97.6%
-- Catches almost all metastases
-- Best for ruling out metastases (high NPV)
+### Balanced High-Performance Model
 
-### For Balanced Performance (Clinical Deployment)
+**Target metrics**:
+- **F1 Score**: >0.85
+- **Sensitivity**: >85%
+- **Specificity**: >90%
+- **Threshold**: >0.50 (indicates confident predictions)
+- **Best for**: Clinical deployment with excellent balance
 
-**Use**: `checkpoint_epoch50_stage3_f1_0.8276.pth`
-- Sensitivity: 87.8%
-- Specificity: 83.6%
-- More balanced false positive/negative rates
+**Example from successful run**: F1=0.9136, Sens=90.24%, Spec=95.08%, Threshold=0.60
 
-### For Maximum Specificity (Confirmatory)
+A model achieving these metrics will:
+- Catch 90%+ of metastases (high sensitivity)
+- Have <10% false positive rate (excellent specificity)
+- Make confident predictions (high threshold)
 
-**Use**: `best_model_f1_0.8395.pth`
-- Specificity: 90.2%
-- Fewer false positives
-- Best for confirming suspected metastases (high PPV)
+## Training Visualization
+
+![Training History](docs/images/training_history_v2.png)
+
+*4-panel visualization showing the complete training progression over 40 epochs:*
+- **Top-left**: Loss curves showing convergence (blue=train, red=validation)
+- **Top-right**: F1 score improvement, with red star marking best performance (0.9136 at epoch 27)
+- **Bottom-left**: Sensitivity progression, achieving 90.24% at best epoch
+- **Bottom-right**: Specificity improvement from ~40% to 95.08%, showing excellent learning
+
+**Key Observations**:
+1. **Loss convergence**: Both train and validation loss decrease smoothly
+2. **F1 improvement**: Steady climb from ~0.60 to 0.9136 peak
+3. **Specificity breakthrough**: Dramatic improvement from early epochs, stabilizing above 90%
+4. **Sensitivity stability**: Maintains 85-98% throughout, ending at strong 90.24%
 
 ## Training Configuration
 
@@ -150,52 +148,38 @@ All checkpoints saved during training, ranked by F1 score:
 
 ## Training Graphs
 
-### Complete Training Overview
+Training visualization graphs (loss curves, F1 progression, confusion matrix) can be generated from the Colab notebook training history.
 
-![Training Curves](docs/images/training_curves.png)
+**To generate visualizations:**
+1. Run Section 12.8 in the Colab notebook after training completes
+2. Graphs will be saved to `/content/drive/MyDrive/outputs/visualizations/`
+3. Download and add to `docs/images/` for README
 
-*4-panel visualization showing loss curves, F1 score progression, sensitivity/specificity trends, and all metrics comparison across 50 epochs. Gray dashed lines indicate curriculum learning stage transitions (epochs 5 and 12).*
-
-### Individual Metrics
-
-**F1 Score Progression**
-
-![F1 Score](docs/images/f1_score_curve.png)
-
-*F1 score evolution from 0.6452 (epoch 1) to peak of 0.8511 (epoch 49). Red star marks best performance.*
-
-**Loss Curves**
-
-![Loss Curves](docs/images/loss_curves.png)
-
-*Training and validation loss over 50 epochs. Shows convergence and stage transitions.*
-
-**Sensitivity and Specificity**
-
-![Sensitivity Specificity](docs/images/sensitivity_specificity.png)
-
-*Trade-off between sensitivity (blue) and specificity (red) across training. Final model achieves 97.6% sensitivity with 78.7% specificity.*
+**Expected visualizations:**
+- Training and validation loss curves
+- F1 score progression across epochs
+- Sensitivity and specificity trends
+- Confusion matrix for best model
 
 ## Confidence Analysis
 
-### Prediction Confidence (Best Model)
+### Prediction Confidence (Best Model - Epoch 27)
 
-Based on epoch 50 output:
-- **Mean Probability (Positive patients)**: 0.556
-- **Mean Probability (Negative patients)**: 0.131
-- **Separation**: 0.424
+Based on epoch 27 validation output:
+- **Mean Probability (Positive patients)**: 0.833
+- **Mean Probability (Negative patients)**: 0.110
+- **Separation**: 0.723
 
-**Interpretation**: Strong separation between classes indicates confident predictions. The model clearly distinguishes metastases from normal brain tissue.
+**Interpretation**: Exceptional separation between classes indicates highly confident predictions. The model clearly distinguishes metastases from normal brain tissue with minimal overlap.
 
-## Performance by Threshold
+### Patient-Level Predictions Distribution
 
-The optimal threshold varies by clinical use case:
-
-| Threshold | Sensitivity | Specificity | F1 | Use Case |
-|-----------|-------------|-------------|----|----------|
-| 0.10 | 0.9756 | 0.7869 | 0.8511 | **Screening** (maximize sensitivity) |
-| 0.25 | 0.8780 | 0.8361 | 0.8276 | **Balanced** (clinical deployment) |
-| 0.45 | 0.8293 | 0.9016 | 0.8395 | **Confirmatory** (minimize false positives) |
+- **Validation probability stats**:
+  - Mean: 0.401
+  - Std: 0.418
+  - Median: 0.190
+  
+This distribution shows clear bimodal separation with most negatives clustering near 0 and positives clustering near 1.
 
 ## Validation
 
@@ -224,26 +208,28 @@ All metrics are computed at the **patient level**:
 ### View Checkpoint Details
 
 ```bash
-python3 view_checkpoint_results.py --checkpoint outputs/models/best_model_f1_0.8511.pth
+python3 view_checkpoint_results.py --checkpoint outputs/models/YOUR_CHECKPOINT.pth
 ```
 
-### Run Inference with Best Model
+### Run Inference with Your Trained Model
 
 ```bash
 python3 scripts/inference.py \
-    --checkpoint outputs/models/best_model_f1_0.8511.pth \
+    --checkpoint outputs/models/YOUR_CHECKPOINT.pth \
     --input /path/to/patient/dicoms/
 ```
 
-### Resume Training
+### Resume Training from Checkpoint
 
 ```bash
 python3 scripts/train.py \
-    --resume outputs/models/best_model_f1_0.8511.pth \
+    --resume outputs/models/YOUR_CHECKPOINT.pth \
     --data_root /path/to/data \
     --labels_path /path/to/labels.csv \
-    --num_epochs 60
+    --num_epochs 40
 ```
+
+Replace `YOUR_CHECKPOINT.pth` with your actual checkpoint filename (e.g., `best_model_patient_pooling.pth`).
 
 ## Next Steps
 

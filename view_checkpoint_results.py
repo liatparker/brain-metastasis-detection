@@ -4,7 +4,7 @@ View checkpoint results without loading model weights.
 Quick way to inspect checkpoint metrics and training history.
 
 Usage:
-    python view_checkpoint_results.py --checkpoint outputs/models/best_model_f1_0.8511.pth
+    python view_checkpoint_results.py --checkpoint outputs/models/YOUR_CHECKPOINT.pth
 """
 
 import argparse

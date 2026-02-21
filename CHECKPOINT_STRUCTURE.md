@@ -12,7 +12,7 @@ The training pipeline saves 4-6 checkpoint files at key milestones, focusing on 
 
 **When saved**: Whenever validation F1 improves during training
 
-**Example**: `best_model_f1_0.7234.pth`
+**Example**: `best_model_patient_pooling.pth` (F1 score varies by training)
 
 **Contains**:
 - Model state dict (all weights)
@@ -103,7 +103,7 @@ import torch
 from src.models.hybrid_model import ResNet50_ImageOnly
 
 # Load checkpoint
-checkpoint = torch.load('best_model_f1_0.7234.pth', map_location='cpu')
+checkpoint = torch.load('YOUR_CHECKPOINT.pth', map_location='cpu')
 
 # Create model
 model = ResNet50_ImageOnly(num_classes=1, dropout_rate=0.4)
@@ -120,7 +120,7 @@ print(f"Val F1: {checkpoint['val_metrics']['f1']:.4f}")
 
 ```python
 # Load checkpoint
-checkpoint = torch.load('checkpoint_epoch12_stage2_f1_0.6890.pth')
+checkpoint = torch.load('checkpoint_epoch12_stage2_f1_XXXX.pth')
 
 # Create model and optimizer
 model = ResNet50_ImageOnly(num_classes=1, dropout_rate=0.4)
@@ -174,10 +174,10 @@ To analyze training progression:
 import torch
 
 checkpoints = [
-    'checkpoint_epoch05_stage1_f1_0.6123.pth',
-    'checkpoint_epoch12_stage2_f1_0.6890.pth',
-    'checkpoint_epoch40_stage3_f1_0.7150.pth',
-    'best_model_f1_0.7234.pth'
+    'checkpoint_epoch05_stage1_f1_XXXX.pth',
+    'checkpoint_epoch12_stage2_f1_XXXX.pth',
+    'checkpoint_epoch40_stage3_f1_XXXX.pth',
+    'best_model_patient_pooling.pth'
 ]
 
 print("Training Progression:")
