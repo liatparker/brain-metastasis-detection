@@ -82,6 +82,11 @@ def parse_args():
         help='Path to checkpoint to resume from'
     )
     parser.add_argument(
+        '--restart_curriculum',
+        action='store_true',
+        help='When used with --resume, load model weights but restart from epoch 0 (Stage 1)'
+    )
+    parser.add_argument(
         '--device',
         type=str,
         default='cuda' if torch.cuda.is_available() else 'cpu',
@@ -538,14 +543,28 @@ def main():
     
     # Resume from checkpoint if specified
     if args.resume:
-        print(f"\nResuming from checkpoint: {args.resume}")
+        print(f"\nLoading checkpoint: {args.resume}")
         checkpoint = torch.load(args.resume, map_location=device, weights_only=False)
         model.load_state_dict(checkpoint['model_state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        start_epoch = checkpoint['epoch']
-        best_val_f1 = checkpoint['val_metrics']['f1']
-        history = checkpoint['history']
-        print(f"Resuming from epoch {start_epoch}")
+        
+        if args.restart_curriculum:
+            # Load model weights only, restart curriculum from Stage 1
+            print("Restarting curriculum from Stage 1 (epoch 0)")
+            print("Model weights loaded, but training will start fresh")
+            start_epoch = 0
+            best_val_f1 = 0.0
+            history = {
+                'train_loss': [], 'val_loss': [], 'val_f1': [],
+                'val_sensitivity': [], 'val_specificity': [],
+                'optimal_threshold': [], 'separation': []
+            }
+        else:
+            # Full resume: load everything and continue from where left off
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+            start_epoch = checkpoint['epoch']
+            best_val_f1 = checkpoint['val_metrics']['f1']
+            history = checkpoint['history']
+            print(f"Resuming from epoch {start_epoch}")
     
     # Training loop
     print("\n" + "="*70)
